@@ -16,16 +16,13 @@ size each platform wants.
 ## Quick start
 
 ```bash
-# One-time setup: download the headless browser it renders with (about 100 MB)
-npx playwright@1.65.1 install --only-shell chromium
-
 # Render page.html to page.png at 1280×720
 npx @iamclaudia/screenshot page.html
 ```
 
-If you skip the setup step, the first run stops and prints the exact command for the
-Playwright version it bundles. On Linux, add `--with-deps` to the install command to pull in the
-system libraries Chromium needs.
+It renders with the Google Chrome you already have. If Playwright's own headless browser is
+installed, it uses that instead. If neither is there, the first run stops and prints the one
+command that downloads Playwright's browser (about 100 MB), pinned to the version it bundles.
 
 To install it globally instead of using `npx`:
 
@@ -131,7 +128,7 @@ bundled Playwright version) are exported too.
 ## Requirements
 
 - Node.js 18 or newer
-- Playwright's Chromium headless shell (see [Quick start](#quick-start))
+- Google Chrome, or Playwright's Chromium headless shell (see [Quick start](#quick-start))
 
 ## Development
 

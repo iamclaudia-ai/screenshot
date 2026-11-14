@@ -108,6 +108,21 @@ describe("cli", () => {
     TIMEOUT,
   );
 
+  test(
+    "falls back to the installed Google Chrome when Playwright's browser is missing",
+    async () => {
+      // An empty browsers directory hides Playwright's headless shell.
+      const proc = Bun.spawn(["bun", CLI, FIXTURE, "chrome.png", "--outdir", outdir], {
+        env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: join(outdir, "no-browsers") },
+        stdout: "pipe",
+        stderr: "pipe",
+      });
+      expect(await proc.exited).toBe(0);
+      expect(pngSize(join(outdir, "chrome.png"))).toEqual({ width: 2560, height: 1440 });
+    },
+    TIMEOUT,
+  );
+
   test("fails on an unknown size preset", async () => {
     const proc = Bun.spawn(["bun", CLI, FIXTURE, "--size", "huge"], {
       stdout: "pipe",
