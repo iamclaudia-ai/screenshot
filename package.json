@@ -4,7 +4,7 @@
   "description": "Generate screenshots from HTML files using Playwright",
   "type": "module",
   "bin": {
-    "screenshot": "./dist/cli.js"
+    "screenshot": "dist/cli.js"
   },
   "files": [
     "dist",
