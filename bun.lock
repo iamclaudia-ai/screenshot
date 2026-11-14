@@ -5,7 +5,7 @@
     "": {
       "name": "@iamclaudia/screenshot",
       "dependencies": {
-        "playwright": "^1.65.1",
+        "playwright": "^1.49.0",
       },
       "devDependencies": {
         "@biomejs/biome": "2.6.4",
