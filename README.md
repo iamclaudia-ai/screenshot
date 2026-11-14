@@ -1,7 +1,7 @@
-# @kiliman/screenshot
+# @iamclaudia/screenshot
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/kiliman/screenshot/refs/heads/main/assets/social-preview.jpg" alt="@kiliman/screenshot" width="100%" />
+  <img src="https://raw.githubusercontent.com/iamclaudia-ai/screenshot/refs/heads/main/assets/social-preview.jpg" alt="@iamclaudia/screenshot" width="100%" />
 </p>
 
 Generate high-quality screenshots from HTML files using Playwright.
@@ -19,10 +19,10 @@ Generate high-quality screenshots from HTML files using Playwright.
 
 ```bash
 # Use with npx (no installation required)
-npx @kiliman/screenshot page.html
+npx @iamclaudia/screenshot page.html
 
 # Or install globally
-pnpm add -g @kiliman/screenshot
+npm install -g @iamclaudia/screenshot
 ```
 
 ## Usage
@@ -31,27 +31,27 @@ pnpm add -g @kiliman/screenshot
 
 ```bash
 # Generate a PNG screenshot with default settings
-npx @kiliman/screenshot page.html
+npx @iamclaudia/screenshot page.html
 
 # Specify output filename
-npx @kiliman/screenshot page.html screenshot.png
+npx @iamclaudia/screenshot page.html screenshot.png
 
 # Use JPEG format
-npx @kiliman/screenshot page.html --format jpg
+npx @iamclaudia/screenshot page.html --format jpg
 
 # Use size presets for common social media platforms
-npx @kiliman/screenshot page.html --size github
-npx @kiliman/screenshot page.html --size og --format jpg
-npx @kiliman/screenshot page.html --size twitter
+npx @iamclaudia/screenshot page.html --size github
+npx @iamclaudia/screenshot page.html --size og --format jpg
+npx @iamclaudia/screenshot page.html --size twitter
 
 # Custom dimensions
-npx @kiliman/screenshot page.html --width 1920 --height 1080
+npx @iamclaudia/screenshot page.html --width 1920 --height 1080
 
 # Output to specific directory
-npx @kiliman/screenshot page.html --outdir ./screenshots
+npx @iamclaudia/screenshot page.html --outdir ./screenshots
 
 # Real example: The social preview image above was generated using this package!
-npx @kiliman/screenshot assets/social-preview.html social-preview.jpg --outdir assets --size github --format jpg
+npx @iamclaudia/screenshot assets/social-preview.html social-preview.jpg --outdir assets --size github --format jpg
 ```
 
 ### Size Presets
@@ -71,13 +71,13 @@ You can override preset dimensions with `--width` and `--height`:
 
 ```bash
 # Use Twitter preset but make it wider
-npx @kiliman/screenshot page.html --size twitter --width 1600
+npx @iamclaudia/screenshot page.html --size twitter --width 1600
 ```
 
 ### CLI Options
 
 ```
-Usage: npx @kiliman/screenshot HTML_FILE [OUT_FILE] [OPTIONS]
+Usage: npx @iamclaudia/screenshot HTML_FILE [OUT_FILE] [OPTIONS]
 
 Arguments:
   HTML_FILE              Path to the HTML file to screenshot (required)
@@ -99,7 +99,7 @@ Note: --width and --height override --size preset values
 You can also use this package programmatically in your Node.js projects:
 
 ```typescript
-import { generateScreenshot } from '@kiliman/screenshot';
+import { generateScreenshot } from '@iamclaudia/screenshot';
 
 // Using size preset
 await generateScreenshot('page.html', 'output.png', {

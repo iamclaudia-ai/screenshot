@@ -16,7 +16,7 @@ async function main() {
       .join("\n");
 
     console.log(`
-Usage: npx @kiliman/screenshot HTML_FILE [OUT_FILE] [OPTIONS]
+Usage: npx @iamclaudia/screenshot HTML_FILE [OUT_FILE] [OPTIONS]
 
 Arguments:
   HTML_FILE              Path to the HTML file to screenshot (required)
@@ -36,11 +36,11 @@ ${sizeList}
 Note: --width and --height override --size preset values
 
 Examples:
-  npx @kiliman/screenshot page.html --size github
-  npx @kiliman/screenshot page.html --size og --format jpg
-  npx @kiliman/screenshot page.html output.png
-  npx @kiliman/screenshot page.html --format jpg --width 1920 --height 1080
-  npx @kiliman/screenshot page.html screenshot.png --outdir ./screenshots
+  npx @iamclaudia/screenshot page.html --size github
+  npx @iamclaudia/screenshot page.html --size og --format jpg
+  npx @iamclaudia/screenshot page.html output.png
+  npx @iamclaudia/screenshot page.html --format jpg --width 1920 --height 1080
+  npx @iamclaudia/screenshot page.html screenshot.png --outdir ./screenshots
 `);
     process.exit(0);
   }

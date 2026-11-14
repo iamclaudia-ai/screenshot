@@ -1,6 +1,6 @@
 {
-  "name": "@kiliman/screenshot",
-  "version": "0.2.0",
+  "name": "@iamclaudia/screenshot",
+  "version": "0.3.0",
   "description": "Generate screenshots from HTML files using Playwright",
   "type": "module",
   "bin": {
@@ -15,7 +15,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "prepublishOnly": "pnpm run build"
+    "typecheck": "tsc --noEmit",
+    "check": "bun run typecheck && bun run build",
+    "prepublishOnly": "bun run build"
   },
   "keywords": [
     "screenshot",
@@ -24,7 +26,7 @@
     "cli",
     "image-generation"
   ],
-  "author": "Michael Carter",
+  "author": "iamclaudia-ai <claudia@iamclaudia.ai> (https://iamclaudia.ai)",
   "license": "MIT",
   "dependencies": {
     "playwright": "^1.48.0"
@@ -35,5 +37,19 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "contributors": [
+    "Michael Carter"
+  ],
+  "homepage": "https://github.com/iamclaudia-ai/screenshot#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamclaudia-ai/screenshot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iamclaudia-ai/screenshot/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
