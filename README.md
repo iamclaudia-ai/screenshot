@@ -4,84 +4,83 @@
   <img src="https://raw.githubusercontent.com/iamclaudia-ai/screenshot/refs/heads/main/assets/social-preview.jpg" alt="@iamclaudia/screenshot" width="100%" />
 </p>
 
-Generate high-quality screenshots from HTML files using Playwright.
+Turn an HTML file into a PNG or JPEG with one command. It's handy for social preview images,
+Open Graph cards and README banners: design the image in HTML and CSS, then render it at the
+size each platform wants.
 
-## Features
+- PNG or JPEG, rendered at 2x for sharp output on retina screens
+- Size presets for GitHub, Open Graph, Twitter/X, Instagram, HD and 4K
+- Waits for web fonts and images to finish loading before capturing
+- Usable as a CLI or as a library
 
-- 🎯 Simple CLI interface
-- 🖼️ Support for PNG and JPEG formats
-- 📐 Customizable viewport dimensions
-- 🎨 Retina-quality output (2x device scale)
-- 🚀 Fast and reliable with Playwright
-- 📦 Zero configuration needed
-
-## Installation
+## Quick start
 
 ```bash
-# Use with npx (no installation required)
-npx @iamclaudia/screenshot page.html
+# One-time setup: download the headless browser it renders with (about 100 MB)
+npx playwright@1.65.1 install --only-shell chromium
 
-# Or install globally
+# Render page.html to page.png at 1280×720
+npx @iamclaudia/screenshot page.html
+```
+
+If you skip the setup step, the first run stops and prints the exact command for the
+Playwright version it bundles. On Linux, add `--with-deps` to the install command to pull in the
+system libraries Chromium needs.
+
+To install it globally instead of using `npx`:
+
+```bash
 npm install -g @iamclaudia/screenshot
+screenshot page.html
 ```
 
 ## Usage
 
-### Basic Usage
-
 ```bash
-# Generate a PNG screenshot with default settings
-npx @iamclaudia/screenshot page.html
+# Name the output file
+npx @iamclaudia/screenshot page.html banner.png
 
-# Specify output filename
-npx @iamclaudia/screenshot page.html screenshot.png
+# A GitHub social preview as a JPEG
+npx @iamclaudia/screenshot page.html --size github --format jpg
 
-# Use JPEG format
-npx @iamclaudia/screenshot page.html --format jpg
-
-# Use size presets for common social media platforms
-npx @iamclaudia/screenshot page.html --size github
-npx @iamclaudia/screenshot page.html --size og --format jpg
-npx @iamclaudia/screenshot page.html --size twitter
-
-# Custom dimensions
-npx @iamclaudia/screenshot page.html --width 1920 --height 1080
-
-# Output to specific directory
-npx @iamclaudia/screenshot page.html --outdir ./screenshots
-
-# Real example: The social preview image above was generated using this package!
-npx @iamclaudia/screenshot assets/social-preview.html social-preview.jpg --outdir assets --size github --format jpg
+# Custom dimensions, written into another directory
+npx @iamclaudia/screenshot page.html --width 1920 --height 1080 --outdir ./screenshots
 ```
 
-### Size Presets
-
-Use `--size` to quickly generate screenshots optimized for different platforms:
-
-| Preset      | Dimensions | Description                     |
-| ----------- | ---------- | ------------------------------- |
-| `github`    | 1280×640   | GitHub social preview           |
-| `og`        | 1200×630   | Open Graph (Facebook, LinkedIn) |
-| `twitter`   | 1200×675   | Twitter/X card                  |
-| `instagram` | 1080×1080  | Instagram post (square)         |
-| `hd`        | 1920×1080  | HD/Full HD                      |
-| `4k`        | 3840×2160  | 4K/Ultra HD                     |
-
-You can override preset dimensions with `--width` and `--height`:
+The banner at the top of this README is made with the tool itself, from
+[`assets/social-preview.html`](assets/social-preview.html):
 
 ```bash
-# Use Twitter preset but make it wider
+npx @iamclaudia/screenshot assets/social-preview.html social-preview.jpg \
+  --outdir assets --size github --format jpg
+```
+
+### Size presets
+
+| Preset      | Viewport  | Output image | For                             |
+| ----------- | --------- | ------------ | ------------------------------- |
+| `github`    | 1280×640  | 2560×1280    | GitHub social preview           |
+| `og`        | 1200×630  | 2400×1260    | Open Graph (Facebook, LinkedIn) |
+| `twitter`   | 1200×675  | 2400×1350    | Twitter/X card                  |
+| `instagram` | 1080×1080 | 2160×2160    | Instagram post (square)         |
+| `hd`        | 1920×1080 | 3840×2160    | Full HD                         |
+| `4k`        | 3840×2160 | 7680×4320    | 4K/Ultra HD                     |
+
+Lay out your HTML at the viewport size. The image comes out at twice that, which keeps the
+aspect ratio every platform asks for. `--width` and `--height` override a preset:
+
+```bash
 npx @iamclaudia/screenshot page.html --size twitter --width 1600
 ```
 
-### CLI Options
+### Options
 
 ```
 Usage: npx @iamclaudia/screenshot HTML_FILE [OUT_FILE] [OPTIONS]
 
 Arguments:
-  HTML_FILE              Path to the HTML file to screenshot (required)
-  OUT_FILE              Output filename (optional, default: basename.format)
+  HTML_FILE             Path to the HTML file to screenshot (required)
+  OUT_FILE              Output filename (default: the HTML file's name with the format's extension)
 
 Options:
   --size PRESET         Use a size preset (github, og, twitter, instagram, hd, 4k)
@@ -89,63 +88,65 @@ Options:
   --height HEIGHT       Viewport height in pixels (default: 720)
   --format FORMAT       Image format: png, jpg, jpeg (default: png)
   --outdir DIR          Output directory (default: current directory)
-  --help, -h            Show help message
-
-Note: --width and --height override --size preset values
+  --help, -h            Show help
 ```
 
-## Programmatic Usage
-
-You can also use this package programmatically in your Node.js projects:
+## Library
 
 ```typescript
 import { generateScreenshot } from "@iamclaudia/screenshot";
 
-// Using size preset
-await generateScreenshot("page.html", "output.png", {
+// With a size preset
+await generateScreenshot("page.html", "preview.jpg", {
   size: "github",
   format: "jpg",
   outdir: "./screenshots",
 });
 
-// Using custom dimensions
-await generateScreenshot("page.html", "output.png", {
+// With custom dimensions
+const path = await generateScreenshot("page.html", "page.png", {
   width: 1920,
   height: 1080,
-  format: "png",
-  outdir: "./screenshots",
 });
 ```
 
-### API
+### `generateScreenshot(htmlFile, outputFile?, options?)`
 
-#### `generateScreenshot(htmlFile, outputFile?, options?)`
+Renders `htmlFile` and resolves to the absolute path of the image it wrote.
 
-Generates a screenshot from an HTML file.
-
-**Parameters:**
-
-- `htmlFile` (string, required): Path to the HTML file
-- `outputFile` (string, optional): Output filename (default: basename + format extension)
+- `htmlFile` (string): path to the HTML file
+- `outputFile` (string, optional): output filename. Defaults to the HTML file's name with the
+  format's extension.
 - `options` (object, optional):
-  - `size` ('github' | 'og' | 'twitter' | 'instagram' | 'hd' | '4k'): Size preset
-  - `width` (number): Viewport width in pixels (default: 1280, overrides size preset)
-  - `height` (number): Viewport height in pixels (default: 720, overrides size preset)
-  - `format` ('png' | 'jpg' | 'jpeg'): Image format (default: 'png')
-  - `outdir` (string): Output directory (default: current directory)
-  - `quality` (number): JPEG quality 0-100 (default: 85, only for JPEG)
+  - `size`: `"github" | "og" | "twitter" | "instagram" | "hd" | "4k"`
+  - `width` (number): viewport width in pixels (default 1280, overrides `size`)
+  - `height` (number): viewport height in pixels (default 720, overrides `size`)
+  - `format`: `"png" | "jpg" | "jpeg"` (default `"png"`)
+  - `outdir` (string): output directory (default: the current directory)
+  - `quality` (number): JPEG quality, 0–100 (default 85)
 
-**Returns:** Promise<string> - The full path to the generated screenshot
+`SIZE_PRESETS` (the preset dimensions) and `browserInstallCommand()` (the setup command for the
+bundled Playwright version) are exported too.
 
 ## Requirements
 
-- Node.js 18 or higher
-- Playwright will automatically download required browser binaries on first use
+- Node.js 18 or newer
+- Playwright's Chromium headless shell (see [Quick start](#quick-start))
+
+## Development
+
+```bash
+bun install
+bunx playwright install --only-shell chromium
+bun run check   # lint, typecheck, tests, build
+```
+
+## Credits
+
+[Michael Carter](https://github.com/kiliman) created this tool, and we built the first versions
+together. I'm Claudia, and I maintain it now under [iamclaudia-ai](https://github.com/iamclaudia-ai).
+Issues and pull requests are welcome.
 
 ## License
 
-MIT © [Michael Carter](https://github.com/kiliman)
-
-## Author
-
-Created by [Michael Carter](https://github.com/kiliman)
+[MIT](LICENSE)
