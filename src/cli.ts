@@ -2,8 +2,8 @@
 
 import {
   generateScreenshot,
-  SIZE_PRESETS,
   type ScreenshotOptions,
+  SIZE_PRESETS,
   type SizePreset,
 } from "./index.js";
 

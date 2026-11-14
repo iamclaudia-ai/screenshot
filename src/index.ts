@@ -1,6 +1,9 @@
-import { chromium } from "playwright";
-import { basename, resolve } from "node:path";
 import { existsSync } from "node:fs";
+import { createRequire } from "node:module";
+import { basename, resolve } from "node:path";
+import { type Browser, chromium } from "playwright";
+
+const require = createRequire(import.meta.url);
 
 export type SizePreset = "github" | "og" | "twitter" | "instagram" | "hd" | "4k";
 
@@ -25,7 +28,7 @@ export interface ScreenshotOptions {
 export async function generateScreenshot(
   htmlFile: string,
   outputFile?: string,
-  options: ScreenshotOptions = {}
+  options: ScreenshotOptions = {},
 ): Promise<string> {
   // Apply size preset if provided
   const presetSize = options.size ? SIZE_PRESETS[options.size] : null;
@@ -50,24 +53,51 @@ export async function generateScreenshot(
 
   console.log(`Generating ${outputFileName} (${width}x${height})...`);
 
-  const browser = await chromium.launch();
-  const page = await browser.newPage({
-    viewport: { width, height },
-    deviceScaleFactor: 2, // 2x for retina quality
-  });
+  const browser = await launchBrowser();
+  try {
+    const page = await browser.newPage({
+      viewport: { width, height },
+      deviceScaleFactor: 2, // 2x for retina quality
+    });
 
-  console.log(`Loading ${htmlFile}...`);
-  await page.goto(`file://${htmlPath}`, { waitUntil: "networkidle" });
+    console.log(`Loading ${htmlFile}...`);
+    await page.goto(`file://${htmlPath}`, { waitUntil: "networkidle" });
 
-  console.log("Taking screenshot...");
-  await page.screenshot({
-    path: outputPath,
-    type: format === "jpg" ? "jpeg" : format,
-    ...(format === "jpg" || format === "jpeg" ? { quality } : {}),
-  });
-
-  await browser.close();
+    console.log("Taking screenshot...");
+    await page.screenshot({
+      path: outputPath,
+      type: format === "jpg" ? "jpeg" : format,
+      ...(format === "jpg" || format === "jpeg" ? { quality } : {}),
+    });
+  } finally {
+    await browser.close();
+  }
   console.log(`✅ Generated: ${outputPath}`);
 
   return outputPath;
+}
+
+/**
+ * The command that downloads the browser this package's Playwright expects.
+ * It pins the bundled Playwright version: a bare `npx playwright install` run
+ * from another directory fetches the latest Playwright, whose browser build
+ * may not be the one ours looks for.
+ */
+export function browserInstallCommand(): string {
+  const { version } = require("playwright/package.json") as { version: string };
+  return `npx playwright@${version} install --only-shell chromium`;
+}
+
+async function launchBrowser(): Promise<Browser> {
+  try {
+    return await chromium.launch();
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("Executable doesn't exist")) {
+      throw new Error(
+        `Playwright's browser isn't installed yet. Run this once, then try again:\n\n  ${browserInstallCommand()}\n\nOn Linux, add --with-deps to also install the system libraries it needs.`,
+        { cause: error },
+      );
+    }
+    throw error;
+  }
 }
