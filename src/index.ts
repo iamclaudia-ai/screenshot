@@ -88,16 +88,33 @@ export function browserInstallCommand(): string {
   return `npx playwright@${version} install --only-shell chromium`;
 }
 
+/**
+ * Playwright's own headless shell when it's installed (the exact build this
+ * Playwright was tested with), otherwise the Google Chrome already on the
+ * machine, so most people never download a browser at all.
+ */
 async function launchBrowser(): Promise<Browser> {
   try {
     return await chromium.launch();
   } catch (error) {
-    if (error instanceof Error && error.message.includes("Executable doesn't exist")) {
-      throw new Error(
-        `Playwright's browser isn't installed yet. Run this once, then try again:\n\n  ${browserInstallCommand()}\n\nOn Linux, add --with-deps to also install the system libraries it needs.`,
-        { cause: error },
-      );
-    }
-    throw error;
+    if (!isMissingBrowser(error)) throw error;
   }
+  try {
+    return await chromium.launch({ channel: "chrome" });
+  } catch (error) {
+    if (!isMissingBrowser(error)) throw error;
+    throw new Error(
+      `No browser found. Install Google Chrome, or run this once to download Playwright's:\n\n  ${browserInstallCommand()}\n\nOn Linux, add --with-deps to also install the system libraries it needs.`,
+      { cause: error },
+    );
+  }
+}
+
+// Playwright has no error codes for these; the messages have been stable for years.
+function isMissingBrowser(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    (error.message.includes("Executable doesn't exist") ||
+      /Chromium distribution '.+' is not found/.test(error.message))
+  );
 }

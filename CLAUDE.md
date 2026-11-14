@@ -14,11 +14,14 @@ shell: `bunx playwright install --only-shell chromium` (uses the repo's pinned P
 
 `tsconfig.json` typechecks only; `tsconfig.build.json` emits `dist/` from `src/`.
 
-## Bumping Playwright
+## Which browser
 
-`playwright` is pinned to a patch range (`~1.65.1`) because each Playwright version expects its
-own browser build. After bumping it, install the new headless shell, run the checks, and the
-README's Quick start command (it names the version).
+`launchBrowser` tries Playwright's headless shell first (the build that Playwright version was
+tested with), then the installed Google Chrome (`channel: "chrome"`), then fails with
+`browserInstallCommand()`, which names the bundled Playwright version. Because Chrome covers most
+machines, `playwright` uses a caret range: a newer minor that wants a different headless shell just
+falls through to Chrome. A test hides the headless shell with an empty `PLAYWRIGHT_BROWSERS_PATH`
+to cover the fallback (GitHub's Ubuntu runners have Chrome installed).
 
 ## Regenerating the banner
 
