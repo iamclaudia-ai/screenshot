@@ -58,14 +58,14 @@ npx @iamclaudia/screenshot assets/social-preview.html social-preview.jpg --outdi
 
 Use `--size` to quickly generate screenshots optimized for different platforms:
 
-| Preset      | Dimensions   | Description                          |
-|-------------|--------------|--------------------------------------|
-| `github`    | 1280×640     | GitHub social preview                |
-| `og`        | 1200×630     | Open Graph (Facebook, LinkedIn)      |
-| `twitter`   | 1200×675     | Twitter/X card                       |
-| `instagram` | 1080×1080    | Instagram post (square)              |
-| `hd`        | 1920×1080    | HD/Full HD                           |
-| `4k`        | 3840×2160    | 4K/Ultra HD                          |
+| Preset      | Dimensions | Description                     |
+| ----------- | ---------- | ------------------------------- |
+| `github`    | 1280×640   | GitHub social preview           |
+| `og`        | 1200×630   | Open Graph (Facebook, LinkedIn) |
+| `twitter`   | 1200×675   | Twitter/X card                  |
+| `instagram` | 1080×1080  | Instagram post (square)         |
+| `hd`        | 1920×1080  | HD/Full HD                      |
+| `4k`        | 3840×2160  | 4K/Ultra HD                     |
 
 You can override preset dimensions with `--width` and `--height`:
 
@@ -99,21 +99,21 @@ Note: --width and --height override --size preset values
 You can also use this package programmatically in your Node.js projects:
 
 ```typescript
-import { generateScreenshot } from '@iamclaudia/screenshot';
+import { generateScreenshot } from "@iamclaudia/screenshot";
 
 // Using size preset
-await generateScreenshot('page.html', 'output.png', {
-  size: 'github',
-  format: 'jpg',
-  outdir: './screenshots'
+await generateScreenshot("page.html", "output.png", {
+  size: "github",
+  format: "jpg",
+  outdir: "./screenshots",
 });
 
 // Using custom dimensions
-await generateScreenshot('page.html', 'output.png', {
+await generateScreenshot("page.html", "output.png", {
   width: 1920,
   height: 1080,
-  format: 'png',
-  outdir: './screenshots'
+  format: "png",
+  outdir: "./screenshots",
 });
 ```
 
