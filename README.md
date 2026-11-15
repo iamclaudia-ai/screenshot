@@ -127,7 +127,7 @@ bundled Playwright version) are exported too.
 
 ## Requirements
 
-- Node.js 18 or newer
+- Node.js 24 or newer
 - Google Chrome, or Playwright's Chromium headless shell (see [Quick start](#quick-start))
 
 ## Development
